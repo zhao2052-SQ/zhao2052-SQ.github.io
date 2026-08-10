@@ -10,11 +10,11 @@
 
 ## Publications
 
-**GoAnt: A Dynamic Multi-Agent System for Diverse and Robust Factor Mining from Market Microstructure Data** — *Under review at AAAI 2027*
+**GoAnt: A Dynamic Multi-Agent System for Diverse and Robust Factor Mining from Market Microstructure Data** — *Under review at AAAI 2027 (co-first author)*
 
-**ThinkPrior: Zero-Rollout Warm-Start Priors for Prompt Selection in RLVR** — *Under review at AAAI 2027*
+**ThinkPrior: Zero-Rollout Warm-Start Priors for Prompt Selection in RLVR** — *Under review at AAAI 2027 (co-first author)*
 
-**BenchScope: How Many Independent Signals Does Your Benchmark Provide?** — *arXiv:2603.29357, 2026*
+**BenchScope: How Many Independent Signals Does Your Benchmark Provide?** — *arXiv:2603.29357, 2026 (co-first author)*
 
 ## Skills
 
