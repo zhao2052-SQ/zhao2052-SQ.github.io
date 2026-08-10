@@ -114,7 +114,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`PRISM live editor  ->  http://localhost:${PORT}`);
+  console.log(`Homepage live editor  ->  http://localhost:${PORT}`);
   console.log(`Editing content in ${CONTENT}`);
   console.log(`Preview target     ->  ${PREVIEW}`);
 });

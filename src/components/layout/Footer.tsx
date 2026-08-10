@@ -27,7 +27,7 @@ export default function Footer({ lastUpdated, lastUpdatedByLocale, defaultLocale
             {messages.footer.lastUpdated}: {resolvedLastUpdated}
           </p>
           <p className="text-xs text-neutral-500 flex items-center">
-            {messages.footer.builtWithPrism}
+            {messages.footer.siteCredit}
           </p>
         </div>
       </div>

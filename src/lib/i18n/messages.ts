@@ -44,7 +44,7 @@ export interface LocaleMessages {
   };
   footer: {
     lastUpdated: string;
-    builtWithPrism: string;
+    siteCredit: string;
   };
 }
 
@@ -94,7 +94,7 @@ const en: LocaleMessages = {
   },
   footer: {
     lastUpdated: 'Last updated',
-    builtWithPrism: '© 2026 Siqi (Stella) Zhao',
+    siteCredit: '© 2026 Siqi (Stella) Zhao',
   },
 };
 
@@ -144,7 +144,7 @@ const zh: LocaleMessages = {
   },
   footer: {
     lastUpdated: '最近更新',
-    builtWithPrism: '© 2026 赵思琪',
+    siteCredit: '© 2026 赵思琪',
   },
 };
 
