@@ -1,18 +1,18 @@
 [site]
 title = "Siqi (Stella) Zhao"
-description = "Personal website of Siqi (Stella) Zhao — research on multi-agent organization, orchestration, and learning systems."
+description = "www.linkedin.com/in/stella-zhao-366b79359;zhao2052-SQ.github.io\n\n — research on multi-agent organization, orchestration, and learning systems."
 favicon = "/favicon.svg"
 last_updated = "August 11, 2026"
 
 [author]
 name = "Siqi (Stella) Zhao"
-title = "Bachelor Student"
-institution = "University of Minnesota"
-avatar = "Personal Portrait.jpg"
+title = "PhD Student"
+institution = "Your University"
+avatar = "personal portrait.jpg"
 
 [social]
 email = "zhao2052@umn.edu"
-location = "City, Country"
+location = "Minneapolis,MN"
 location_url = "https://maps.google.com"
 location_details = [ "Room 000, Research Building,", "University Avenue, City, Country" ]
 google_scholar = "https://scholar.google.com"
