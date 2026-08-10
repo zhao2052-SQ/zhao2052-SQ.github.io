@@ -44,8 +44,14 @@ async function listFiles() {
   });
   const out = [];
   for (const name of names) {
-    const raw = await fs.readFile(safePath(name), 'utf8');
-    const entry = { name, label: LABELS[name] || name, raw, kind: path.extname(name).slice(1) };
+    const p = safePath(name);
+    const raw = await fs.readFile(p, 'utf8');
+    const stat = await fs.stat(p);
+    const entry = {
+      name, label: LABELS[name] || name, raw,
+      kind: path.extname(name).slice(1),
+      mtime: stat.mtimeMs,
+    };
     if (entry.kind === 'toml') {
       try { entry.data = TOML.parse(raw); } catch (e) { entry.parseError = String(e.message || e); }
     }
@@ -120,8 +126,21 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (req.method === 'POST' && url.pathname === '/api/save') {
-      const { name, data, raw, previewPath } = JSON.parse(await readBody(req));
+      const { name, data, raw, previewPath, mtime } = JSON.parse(await readBody(req));
       const file = safePath(name);
+
+      // Refuse to clobber edits made on disk after this file was loaded.
+      if (typeof mtime === 'number') {
+        const cur = await fs.stat(file).catch(() => null);
+        if (cur && cur.mtimeMs - mtime > 1000) {
+          return json(res, 409, {
+            error: 'stale',
+            message: `content/${name} changed on disk after you loaded it. Reload to get the newer version, or press Save again to overwrite.`,
+            diskMtime: cur.mtimeMs,
+          });
+        }
+      }
+
       let text;
       if (typeof raw === 'string') {
         text = raw;
@@ -138,7 +157,8 @@ const server = http.createServer(async (req, res) => {
       await fs.writeFile(file, text, 'utf8');
 
       const sync = await waitForRebuild(target, before);
-      return json(res, 200, { ok: true, name, bytes: Buffer.byteLength(text), ...sync });
+      const st = await fs.stat(file).catch(() => null);
+      return json(res, 200, { ok: true, name, bytes: Buffer.byteLength(text), mtime: st ? st.mtimeMs : 0, ...sync });
     }
 
     if (req.method === 'POST' && url.pathname === '/api/revert') {

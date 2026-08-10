@@ -1,21 +1,4 @@
 type = "card"
 title = "Services"
 description = "Academic service and community involvement."
-
-[[items]]
-title = "Conference Reviewer"
-subtitle = "NeurIPS / ICLR / ICML"
-date = "2026"
-content = "Reviewer for the multi-agent systems and LLM agents tracks."
-
-[[items]]
-title = "Workshop Volunteer"
-subtitle = "Your University"
-date = "2025"
-content = "Helped organize a departmental research workshop."
-
-[[items]]
-title = "Teaching Assistant"
-subtitle = "Machine Learning (Graduate)"
-date = "2025"
-content = "Led weekly discussion sections and graded course projects."
+items = []

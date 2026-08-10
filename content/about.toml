@@ -3,10 +3,9 @@ title = "About"
 
 [profile]
 research_interests = [
+  "Multi-Agent Orchestration",
   "Multi-Agent Systems",
-  "Agent Orchestration & Organizational Learning",
-  "Quality-Diversity Optimization",
-  "LLM Reasoning"
+  "AI Evaluation & Benchmarking"
 ]
 
 [[sections]]

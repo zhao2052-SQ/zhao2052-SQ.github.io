@@ -94,7 +94,7 @@ const en: LocaleMessages = {
   },
   footer: {
     lastUpdated: 'Last updated',
-    siteCredit: '© 2026 Siqi (Stella) Zhao',
+    siteCredit: '© 2026 Stella Zhao',
   },
 };
 

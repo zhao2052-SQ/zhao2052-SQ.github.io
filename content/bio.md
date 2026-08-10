@@ -1,9 +1,5 @@
-I am an undergraduate student at the **University of Minnesota**.
+I am an undergraduate student at the **University of Minnesota, Twin Cities**.
 
-My research asks a simple question: **how should a population of AI agents organize itself?** Most work on multi-agent LLM systems optimizes *routing* and *topology* — who talks to whom. I am interested in the wider problem of **organizational learning**: who participates, how they connect, when they run, what they transmit, what memory they share, and how the organization restructures itself over its lifetime.
+My research is on **multi-agent orchestration** and **multi-agent systems** — how a population of AI agents should organize, coordinate, and be evaluated.
 
-A recurring theme in my work is that **collective intelligence is bounded by effective independence, not by compute**. Sharing everything between agents quietly converts independent errors into correlated ones, which destroys the very verification that multi-agent systems are supposed to provide.
-
-I also work on **quality-diversity optimization** for high-dimensional search problems, where maintaining a diverse population of solutions matters more than converging to a single optimum.
-
-> ✏️ *以上为占位文字 —— 在编辑器里打开 `bio.md` 换成你自己的介绍。*
+In [BenchScope](https://arxiv.org/abs/2603.29357) I introduced *Effective Dimensionality*, a diagnostic for how many genuinely independent signals a benchmark suite actually provides. My current work, **GoAnt**, studies orchestration for multi-agent systems and is under review at AAAI 2027.

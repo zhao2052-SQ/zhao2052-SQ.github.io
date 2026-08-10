@@ -1,15 +1,7 @@
 [[news]]
 date = "2026-08"
-content = "Started a new research agenda on **memory topology** — treating *who may read/write whose memory* as a learnable organizational variable."
-
-[[news]]
-date = "2026-07"
-content = "Completed the 5-seed × 3-domain experimental grid for the quality-diversity orchestration project 🎉"
+content = "**GoAnt** — work on multi-agent orchestration for multi-agent systems — is under review at **AAAI 2027**."
 
 [[news]]
 date = "2026-03"
-content = "Presented preliminary work on multi-agent organizational learning at a group seminar."
-
-[[news]]
-date = "2025-09"
-content = "Started my PhD at Your University."
+content = "**BenchScope** is on arXiv: [How Many Independent Signals Does Your Benchmark Provide?](https://arxiv.org/abs/2603.29357)"

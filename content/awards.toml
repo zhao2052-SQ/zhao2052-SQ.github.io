@@ -1,21 +1,4 @@
 type = "card"
 title = "Awards"
 description = "Honors and awards."
-
-[[items]]
-title = "Your Award Name"
-subtitle = "Awarding Organization"
-date = "2026"
-content = "Replace this with a short description of the award."
-
-[[items]]
-title = "Your Scholarship Name"
-subtitle = "Awarding Organization"
-date = "2025"
-content = "Replace this with a short description."
-
-[[items]]
-title = "Outstanding Graduate"
-subtitle = "Your University"
-date = "2024"
-content = "Replace this with a short description."
+items = []

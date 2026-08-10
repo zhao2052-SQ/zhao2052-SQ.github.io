@@ -328,6 +328,7 @@ async function save(auto){
   saving = true;
   const body = f._rawMode ? { name: f.name, raw: f.raw } : { name: f.name, data: f.data };
   body.previewPath = currentPath();
+  if (!f._force) body.mtime = f.mtime;
   $('#save').disabled = true;
   $('#status').textContent = 'saving…';
   try{
@@ -335,7 +336,24 @@ async function save(auto){
       method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
     });
     const j = await r.json();
+    if (r.status === 409){
+      $('#status').textContent = '⚠ file changed on disk';
+      if (confirm(j.message + '\n\nOK = reload from disk (discard your edits)\nCancel = overwrite the file on disk')){
+        dirty.delete(f.name);
+        await load(f.name);
+        refresh();
+        toast('Reloaded from disk');
+      } else {
+        f._force = true;
+        saving = false;
+        $('#save').disabled = false;
+        return save(false);
+      }
+      return;
+    }
     if (!r.ok) throw new Error(j.error || 'save failed');
+    f.mtime = j.mtime;
+    f._force = false;
     dirty.delete(f.name);
     renderSidebar();
     refresh();
@@ -360,8 +378,30 @@ function refresh(){
   fr.src = u.toString();
 }
 
-$('#save').onclick = save;
+$('#save').onclick = () => save(false);
 $('#reload').onclick = refresh;
+
+// If files change on disk (e.g. edited elsewhere) pull them in, unless the
+// user has unsaved work in the current file.
+setInterval(async () => {
+  if (dirty.size || saving) return;
+  try{
+    const fresh = (await (await fetch('/api/files')).json()).files;
+    const changed = fresh.some(nf => {
+      const old = FILES.find(o => o.name === nf.name);
+      return !old || old.mtime !== nf.mtime;
+    });
+    if (changed){
+      FILES = fresh;
+      renderSidebar();
+      if (current) select(current);
+      $('#status').textContent = '↻ reloaded (changed on disk)';
+      setTimeout(() => {
+        if ($('#status').textContent.startsWith('↻')) $('#status').textContent = '';
+      }, 2500);
+    }
+  }catch{}
+}, 3000);
 $('#open').onclick = () => window.open($('#url').value, '_blank');
 $('#revert').onclick = async () => {
   if (!confirm('Restore content/' + current + ' from its last backup?')) return;

@@ -1,7 +1,7 @@
 @article{sha2026benchscope,
   selected={true},
   title = {BenchScope: How Many Independent Signals Does Your Benchmark Provide?},
-  author = {Tommy Sha and Siqi (Stella) Zhao*},
+  author = {Tommy Sha and Stella Zhao*},
   year = {2026},
   journal = {arXiv preprint arXiv:2603.29357},
   arxiv = {2603.29357},
@@ -10,4 +10,15 @@
   abstract = {AI evaluation suites often report many scores without checking whether those scores carry independent information. We introduce Effective Dimensionality (ED), the participation ratio of a centered benchmark-score spectrum, as a fast, population-conditional upper-bound diagnostic of measurement breadth. Applied at per-instance granularity to 22 benchmarks across 8 domains and more than 8,400 model evaluations, ED reveals substantial redundancy: the six-score Open LLM Leaderboard behaves like roughly two effective measurement axes (ED = 1.7), BBH and MMLU-Pro are near-interchangeable (rho = 0.96, stable across seven subpopulations), and measurement breadth varies more than 20x across current benchmarks. We show that relative ED rankings are stable under matched-dimension controls and that ED can flag redundant suite components, monitor performance-conditional compression, and guide benchmark maintenance.},
   description={Introduces Effective Dimensionality (ED) to measure how many genuinely independent signals a benchmark suite provides, revealing that many widely used suites are far more redundant than their score counts suggest.},
   keywords={Benchmarking, Evaluation, Effective Dimensionality, LLM}
+}
+
+@article{zhao2027goant,
+  selected={true},
+  title = {GoAnt: An Ant-Colony Framework for Execution-Aware Alpha Factor Discovery},
+  author = {Stella Zhao*},
+  year = {2027},
+  journal = {Under Review, AAAI 2027},
+  abstract = {Automated alpha factor discovery from market microstructure data faces two coupled failures. Naive predictive objectives reward signals that are unprofitable once slippage and market impact are charged, a failure we call the Execution Trap, while static coordinators keep funding similar regions until the population collapses into near-duplicate programs, a failure we call the Reasoning Trap. We propose GoAnt, an ant-colony-inspired framework that decouples generation, execution-aware evaluation and adaptive dispatch. Three non-communicating Worker Ants write programs to a shared Mental Map that sorts candidates into niches, and a compact Queen Ant reallocates the evaluation budget across them. Each niche keeps the centre of the candidate that founded it, so the Map is dynamic through adaptive cardinality alone and not through any re-charting of its geometry. We evaluate on real A-share microstructure data spanning 2023-2026 in two data categories, price-volume panels and order-book snapshots, against communicative multi-agent baselines and against map-free, frozen-map, re-fitted and moving-centre ablations, with the frozen arm enforced by end-of-run invariants, not by label.},
+  description={An ant-colony-inspired framework for automated alpha factor discovery that decouples generation, execution-aware evaluation, and adaptive dispatch. Non-communicating Worker Ants write candidate programs into a shared Mental Map of niches while a compact Queen Ant reallocates the evaluation budget, addressing both the Execution Trap (signals that look predictive but lose money after slippage and market impact) and the Reasoning Trap (coordinators that keep funding similar regions until the population collapses into near-duplicates).},
+  keywords={Multi-Agent Orchestration, Multi-Agent Systems}
 }
