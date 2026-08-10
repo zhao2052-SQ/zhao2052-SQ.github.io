@@ -1,7 +1,7 @@
 [[news]]
 date = "2026-08"
-content = "**GoAnt** — work on multi-agent orchestration for multi-agent systems — is under review at **AAAI 2027**."
+content = "**GoAnt** was cited by *(Microsoft Research — paper title TBD)*."
 
 [[news]]
-date = "2026-03"
-content = "**BenchScope** is on arXiv: [How Many Independent Signals Does Your Benchmark Provide?](https://arxiv.org/abs/2603.29357)"
+date = "2026-07"
+content = "**BenchScope** and **GoAnt** are under review at **AAAI 2027**."

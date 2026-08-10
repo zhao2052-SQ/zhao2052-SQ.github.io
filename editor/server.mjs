@@ -126,19 +126,25 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (req.method === 'POST' && url.pathname === '/api/save') {
-      const { name, data, raw, previewPath, mtime } = JSON.parse(await readBody(req));
+      const { name, data, raw, previewPath, mtime, force } = JSON.parse(await readBody(req));
       const file = safePath(name);
 
       // Refuse to clobber edits made on disk after this file was loaded.
-      if (typeof mtime === 'number') {
-        const cur = await fs.stat(file).catch(() => null);
-        if (cur && cur.mtimeMs - mtime > 1000) {
-          return json(res, 409, {
-            error: 'stale',
-            message: `content/${name} changed on disk after you loaded it. Reload to get the newer version, or press Save again to overwrite.`,
-            diskMtime: cur.mtimeMs,
-          });
-        }
+      // A missing mtime means the browser tab is running an outdated editor
+      // build that predates conflict detection, so reject it outright.
+      if (typeof mtime !== 'number') {
+        return json(res, 409, {
+          error: 'outdated-client',
+          message: 'This editor tab is out of date and cannot save safely. Hard-reload http://localhost:4000 (Cmd+Shift+R) and try again.',
+        });
+      }
+      const cur = await fs.stat(file).catch(() => null);
+      if (!force && cur && cur.mtimeMs - mtime > 1000) {
+        return json(res, 409, {
+          error: 'stale',
+          message: `content/${name} changed on disk after you loaded it. Reload to get the newer version, or press Save again to overwrite.`,
+          diskMtime: cur.mtimeMs,
+        });
       }
 
       let text;

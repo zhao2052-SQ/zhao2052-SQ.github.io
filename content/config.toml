@@ -1,39 +1,40 @@
 [site]
-title = "Stella Zhao"
-description = "Personal website of Stella Zhao, University of Minnesota — multi-agent orchestration, multi-agent systems, and AI evaluation."
+title = "Siqi (Stella) Zhao"
+description = "Personal website of Siqi (Stella) Zhao — research on multi-agent organization, orchestration, and learning systems."
 favicon = "/favicon.svg"
 last_updated = "August 11, 2026"
 
 [author]
-name = "Stella Zhao"
-title = "Bachelor Student"
+name = "Siqi (Stella) Zhao"
+title = "Junior Student"
 institution = "University of Minnesota"
 avatar = "Personal Portrait.jpg"
 
 [social]
 email = "zhao2052@umn.edu"
-location = "Minneapolis,MN"
+location = "Minneapolis, MN,USA"
 location_url = "https://maps.google.com"
-location_details = [ "University of Minnesota,", "Twin Cities, Minneapolis, MN" ]
-semantic_scholar = "https://www.semanticscholar.org/author/2406151566"
-dblp = "https://dblp.org/pid/433/2336"
-github = "https://github.com/zhao2052-SQ"
-linkedin = "https://www.linkedin.com/in/stella-zhao-366b79359"
+location_details = []
+google_scholar = "https://scholar.google.com/citations?user=00F7tDwAAAAJ&hl=en"
+orcid = "0009-0000-1780-0440"
+github = "zhao2052-SQ.github.io"
+linkedin = "www.linkedin.com/in/stella-zhao-366b79359"
 
 [features]
 enable_likes = true
 enable_one_page_mode = false
 
 [i18n]
-enabled = false
-locales = [ "en" ]
+enabled = true
+locales = [ "zh", "en" ]
 default_locale = "en"
-mode = "fixed"
+mode = "auto"
 fixed_locale = "en"
-persist = false
-switcher = false
+persist = true
+switcher = true
 
 [i18n.labels]
+zh = "中文"
 en = "English"
 
 [[navigation]]

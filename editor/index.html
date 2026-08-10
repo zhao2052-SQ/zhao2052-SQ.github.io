@@ -328,7 +328,8 @@ async function save(auto){
   saving = true;
   const body = f._rawMode ? { name: f.name, raw: f.raw } : { name: f.name, data: f.data };
   body.previewPath = currentPath();
-  if (!f._force) body.mtime = f.mtime;
+  body.mtime = f.mtime;
+  if (f._force) body.force = true;
   $('#save').disabled = true;
   $('#status').textContent = 'saving…';
   try{
