@@ -1,4 +1,4 @@
-I am a PhD student at **Your University**, advised by [Prof. Advisor Name](https://example.com).
+I am an undergraduate student at the **University of Minnesota**.
 
 My research asks a simple question: **how should a population of AI agents organize itself?** Most work on multi-agent LLM systems optimizes *routing* and *topology* — who talks to whom. I am interested in the wider problem of **organizational learning**: who participates, how they connect, when they run, what they transmit, what memory they share, and how the organization restructures itself over its lifetime.
 
@@ -6,4 +6,4 @@ A recurring theme in my work is that **collective intelligence is bounded by eff
 
 I also work on **quality-diversity optimization** for high-dimensional search problems, where maintaining a diverse population of solutions matters more than converging to a single optimum.
 
-> ✏️ *This is placeholder text — click "Edit" in the live editor, or open `content/bio.md`, to replace it with your own.*
+> ✏️ *以上为占位文字 —— 在编辑器里打开 `bio.md` 换成你自己的介绍。*

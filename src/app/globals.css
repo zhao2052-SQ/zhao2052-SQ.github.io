@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
+/* Georgia ships with macOS/Windows; fall back to a serif stack elsewhere. */
 @font-face {
   font-family: "Georgia CDN";
-  src: url("https://jialeliu.com/fonts/georgiab.woff2") format("woff2");
+  src: local("Georgia Bold"), local("Georgia-Bold"), local("Georgia");
   font-style: normal;
   font-weight: 700;
   font-display: swap;

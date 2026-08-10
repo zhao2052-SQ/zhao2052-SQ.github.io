@@ -69,6 +69,42 @@ function readBody(req) {
   });
 }
 
+// Fetch the rendered page and strip volatile markup so two snapshots of an
+// unchanged page compare equal.
+async function snapshot(target) {
+  try {
+    const r = await fetch(target + (target.includes('?') ? '&' : '?') + '_s=' + Date.now(), {
+      headers: { 'Cache-Control': 'no-cache' },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!r.ok) return null;
+    const html = await r.text();
+    return html
+      .replace(/<script[\s\S]*?<\/script>/g, '')
+      .replace(/_s=\d+/g, '')
+      .replace(/_r=\d+/g, '')
+      .replace(/\?v=[\w-]+/g, '');
+  } catch {
+    return null;
+  }
+}
+
+// Poll the dev server until the rendered output actually reflects the write.
+async function waitForRebuild(target, before, budgetMs = 20000) {
+  const t0 = Date.now();
+  let last = null;
+  while (Date.now() - t0 < budgetMs) {
+    await new Promise((r) => setTimeout(r, 350));
+    const now = await snapshot(target);
+    if (now === null) continue;      // dev server mid-recompile
+    last = now;
+    if (before === null || now !== before) {
+      return { synced: true, waitedMs: Date.now() - t0 };
+    }
+  }
+  return { synced: last !== null, waitedMs: Date.now() - t0, timedOut: true };
+}
+
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://localhost:${PORT}`);
@@ -84,7 +120,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (req.method === 'POST' && url.pathname === '/api/save') {
-      const { name, data, raw } = JSON.parse(await readBody(req));
+      const { name, data, raw, previewPath } = JSON.parse(await readBody(req));
       const file = safePath(name);
       let text;
       if (typeof raw === 'string') {
@@ -94,9 +130,15 @@ const server = http.createServer(async (req, res) => {
         TOML.parse(text); // validate round-trip before writing
         if (!text.endsWith('\n')) text += '\n';
       }
+
+      const target = PREVIEW + (previewPath || '/');
+      const before = await snapshot(target);
+
       await fs.copyFile(file, file + '.bak').catch(() => {});
       await fs.writeFile(file, text, 'utf8');
-      return json(res, 200, { ok: true, name, bytes: Buffer.byteLength(text) });
+
+      const sync = await waitForRebuild(target, before);
+      return json(res, 200, { ok: true, name, bytes: Buffer.byteLength(text), ...sync });
     }
 
     if (req.method === 'POST' && url.pathname === '/api/revert') {

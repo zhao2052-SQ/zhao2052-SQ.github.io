@@ -77,7 +77,7 @@
   <span id="status" class="sub"></span>
   <button id="revert" class="danger" title="Restore this file from its .bak backup">Revert file</button>
   <button id="reload">Reload preview</button>
-  <button id="save" class="primary">Save &amp; Refresh &nbsp;⌘S</button>
+  <button id="save" class="primary">Save now &nbsp;⌘S</button>
 </header>
 
 <main>
@@ -136,6 +136,14 @@ function renderSidebar(){
 function select(name){
   current = name;
   renderSidebar();
+
+  // keep the preview on the page this file actually controls
+  const page = FILE_PAGE[name];
+  if (page && currentPath() !== page){
+    $('#url').value = PREVIEW + page;
+    refresh();
+  }
+
   const f = FILES.find(x => x.name === name);
   const ed = $('#editor');
   ed.innerHTML = '';
@@ -169,14 +177,15 @@ function select(name){
 
   const hint = document.createElement('p');
   hint.className = 'hint';
-  hint.textContent = 'Fields write back to TOML on save. Note: comments in the original file are not preserved when saving a TOML form.';
+  hint.textContent = 'Auto-saves ~1s after you stop typing, then refreshes the preview once the site has actually rebuilt. Note: comments in the original TOML are not preserved.';
   ed.appendChild(hint);
 }
 
 function markDirty(name){
   dirty.add(name);
   renderSidebar();
-  $('#status').textContent = 'unsaved changes';
+  $('#status').textContent = '● editing…';
+  scheduleAutosave();
 }
 
 function buildForm(root, obj, fileName){
@@ -290,11 +299,37 @@ function fieldRow(key, val, parent, fileName){
   return row;
 }
 
-async function save(){
+// Which page each content file actually renders on — keeps the preview
+// pointed at whatever the user is editing.
+const FILE_PAGE = {
+  'config.toml': '/', 'about.toml': '/', 'bio.md': '/', 'news.toml': '/',
+  'research.toml': '/research', 'awards.toml': '/awards',
+  'services.toml': '/services', 'cv.md': '/cv', 'cv.toml': '/cv',
+  'publications.bib': '/publications', 'publications.toml': '/publications',
+};
+
+let autosaveTimer = null;
+let saving = false;
+
+function currentPath(){
+  try { return new URL($('#url').value, PREVIEW).pathname; } catch { return '/'; }
+}
+
+function scheduleAutosave(){
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(() => save(true), 900);
+}
+
+async function save(auto){
   const f = FILES.find(x => x.name === current);
   if (!f) return;
+  if (saving){ scheduleAutosave(); return; }
+  clearTimeout(autosaveTimer);
+  saving = true;
   const body = f._rawMode ? { name: f.name, raw: f.raw } : { name: f.name, data: f.data };
+  body.previewPath = currentPath();
   $('#save').disabled = true;
+  $('#status').textContent = 'saving…';
   try{
     const r = await fetch('/api/save', {
       method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
@@ -302,13 +337,18 @@ async function save(){
     const j = await r.json();
     if (!r.ok) throw new Error(j.error || 'save failed');
     dirty.delete(f.name);
-    $('#status').textContent = '';
     renderSidebar();
-    toast('Saved content/' + f.name);
-    setTimeout(refresh, 700);   // let Next.js pick up the file change
+    refresh();
+    $('#status').textContent = j.timedOut ? '⚠ saved (preview lagging)' : '✓ saved · preview updated';
+    if (!auto) toast('Saved content/' + f.name);
+    setTimeout(() => {
+      if ($('#status').textContent.startsWith('✓')) $('#status').textContent = '';
+    }, 2500);
   }catch(e){
+    $('#status').textContent = '✗ save failed';
     toast('Save failed: ' + e.message, true);
   }finally{
+    saving = false;
     $('#save').disabled = false;
   }
 }
