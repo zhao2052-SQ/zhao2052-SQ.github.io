@@ -1,5 +1,9 @@
 [[news]]
 date = "2026-08"
+content = "**BenchScope**'s *Effective Dimensionality* will feature in forthcoming work on low-rank structure in evaluation from **Microsoft Research**."
+
+[[news]]
+date = "2026-08"
 content = "**BenchScope**'s *Effective Dimensionality* is adopted in [The Evaluation Blind Spot: A Stereological Theory of Benchmark Coverage for Large Language Models](https://arxiv.org/abs/2606.05169) by Jason Z Wang."
 
 [[news]]
