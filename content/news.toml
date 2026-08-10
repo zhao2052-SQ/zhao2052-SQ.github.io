@@ -1,6 +1,6 @@
 [[news]]
 date = "2026-08"
-content = "**GoAnt** was cited by *(Microsoft Research — paper title TBD)*."
+content = "**BenchScope**'s *Effective Dimensionality* is adopted in [The Evaluation Blind Spot: A Stereological Theory of Benchmark Coverage for Large Language Models](https://arxiv.org/abs/2606.05169) by Jason Z Wang."
 
 [[news]]
 date = "2026-07"

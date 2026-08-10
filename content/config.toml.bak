@@ -1,11 +1,11 @@
 [site]
-title = "Stella Zhao"
-description = "Personal website of Stella Zhao, University of Minnesota — multi-agent orchestration and multi-agent systems."
+title = "Siqi (Stella) Zhao"
+description = "Personal website of Siqi (Stella) Zhao — research on multi-agent organization, orchestration, and learning systems."
 favicon = "/favicon.svg"
 last_updated = "August 11, 2026"
 
 [author]
-name = "Stella Zhao"
+name = "Siqi (Stella) Zhao"
 title = "Junior Student"
 institution = "University of Minnesota"
 avatar = "Personal Portrait.jpg"
