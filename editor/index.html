@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PRISM Live Editor — Siqi (Stella) Zhao</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#fff; --ink:#14171f; --muted:#6b7280;
+    --line:#e5e7eb; --accent:#3b5bdb; --accent-soft:#eef2ff; --ok:#0f9d58; --warn:#b45309;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0f1117; --panel:#171a22; --ink:#e8eaf0; --muted:#9aa2b1;
+           --line:#272b36; --accent:#7c9cff; --accent-soft:#1c2333; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif;
+       background:var(--bg);color:var(--ink);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  header{display:flex;align-items:center;gap:14px;padding:10px 16px;background:var(--panel);
+         border-bottom:1px solid var(--line);flex:0 0 auto}
+  header h1{font-size:15px;margin:0;font-weight:650;letter-spacing:-.2px}
+  header .sub{color:var(--muted);font-size:12px}
+  .spacer{flex:1}
+  button{font:inherit;border:1px solid var(--line);background:var(--panel);color:var(--ink);
+         padding:6px 12px;border-radius:8px;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  button.primary:disabled{opacity:.45;cursor:default}
+  button.tiny{padding:3px 8px;font-size:12px;border-radius:6px}
+  button.danger:hover{border-color:#e03131;color:#e03131}
+  main{flex:1;display:flex;min-height:0}
+  #sidebar{width:190px;flex:0 0 auto;background:var(--panel);border-right:1px solid var(--line);
+           overflow:auto;padding:10px 8px}
+  #sidebar .grp{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+                padding:10px 8px 4px}
+  #sidebar a{display:block;padding:7px 10px;border-radius:8px;color:var(--ink);text-decoration:none;
+             font-size:13px;cursor:pointer}
+  #sidebar a:hover{background:var(--accent-soft)}
+  #sidebar a.active{background:var(--accent);color:#fff;font-weight:600}
+  #sidebar a .dot{color:var(--warn);font-weight:700}
+  #editor{flex:1 1 46%;min-width:340px;overflow:auto;padding:18px 20px}
+  #preview{flex:1 1 54%;min-width:320px;border-left:1px solid var(--line);display:flex;flex-direction:column;background:var(--panel)}
+  #preview .bar{display:flex;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line)}
+  #preview .bar input{flex:1;font:12px ui-monospace,SFMono-Regular,Menlo,monospace;padding:5px 8px;
+                      border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink)}
+  #preview iframe{flex:1;border:0;background:#fff}
+  h2.filetitle{margin:0 0 2px;font-size:19px;letter-spacing:-.3px}
+  .path{color:var(--muted);font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:16px}
+  fieldset{border:1px solid var(--line);border-radius:11px;margin:0 0 14px;padding:12px 14px;background:var(--panel)}
+  legend{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);padding:0 6px}
+  .row{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+  .row label{flex:0 0 148px;color:var(--muted);font-size:12.5px;padding-top:7px;word-break:break-word}
+  .row .ctl{flex:1;min-width:0}
+  input[type=text],textarea{width:100%;font:inherit;padding:7px 9px;border:1px solid var(--line);
+    border-radius:8px;background:var(--bg);color:var(--ink)}
+  textarea{resize:vertical;min-height:70px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  textarea.big{min-height:440px}
+  input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
+  .item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;background:var(--bg)}
+  .item .hd{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .item .hd b{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .arr{display:flex;gap:6px;margin:4px 0}
+  .arr input{flex:1}
+  .hint{color:var(--muted);font-size:12px;margin:6px 0 0}
+  #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);
+    background:var(--ink);color:var(--bg);padding:9px 18px;border-radius:999px;font-size:13px;
+    transition:transform .22s ease;z-index:99;box-shadow:0 6px 24px rgba(0,0,0,.2)}
+  #toast.show{transform:translateX(-50%) translateY(0)}
+  #toast.err{background:#c92a2a;color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <h1>PRISM Live Editor</h1>
+  <span class="sub">Siqi (Stella) Zhao · edits write to <code>content/</code></span>
+  <span class="spacer"></span>
+  <span id="status" class="sub"></span>
+  <button id="revert" class="danger" title="Restore this file from its .bak backup">Revert file</button>
+  <button id="reload">Reload preview</button>
+  <button id="save" class="primary">Save &amp; Refresh &nbsp;⌘S</button>
+</header>
+
+<main>
+  <nav id="sidebar"></nav>
+  <section id="editor"></section>
+  <section id="preview">
+    <div class="bar">
+      <button class="tiny" data-nav="/">Home</button>
+      <button class="tiny" data-nav="/publications/">Publications</button>
+      <button class="tiny" data-nav="/research/">Research</button>
+      <button class="tiny" data-nav="/cv/">CV</button>
+      <input id="url" value="__PREVIEW_URL__/" spellcheck="false" />
+      <button class="tiny" id="open">↗</button>
+    </div>
+    <iframe id="frame" src="__PREVIEW_URL__/"></iframe>
+  </section>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const PREVIEW = "__PREVIEW_URL__";
+let FILES = [], current = null, dirty = new Set();
+
+const $ = (s) => document.querySelector(s);
+const toast = (msg, err) => {
+  const t = $('#toast'); t.textContent = msg; t.className = 'show' + (err ? ' err' : '');
+  clearTimeout(t._h); t._h = setTimeout(() => t.className = '', 2600);
+};
+
+function titleize(k){
+  return String(k).replace(/[_.]/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+async function load(keep){
+  const r = await fetch('/api/files');
+  FILES = (await r.json()).files;
+  renderSidebar();
+  const pick = keep && FILES.find(f => f.name === keep) ? keep : (current || FILES[0].name);
+  select(pick);
+}
+
+function renderSidebar(){
+  const nav = $('#sidebar');
+  nav.innerHTML = '<div class="grp">Content</div>';
+  FILES.forEach(f => {
+    const a = document.createElement('a');
+    a.textContent = f.label;
+    if (dirty.has(f.name)) a.innerHTML += ' <span class="dot">•</span>';
+    if (f.name === current) a.className = 'active';
+    a.onclick = () => select(f.name);
+    nav.appendChild(a);
+  });
+}
+
+function select(name){
+  current = name;
+  renderSidebar();
+  const f = FILES.find(x => x.name === name);
+  const ed = $('#editor');
+  ed.innerHTML = '';
+
+  const h = document.createElement('h2'); h.className = 'filetitle'; h.textContent = f.label;
+  const p = document.createElement('div'); p.className = 'path'; p.textContent = 'content/' + f.name;
+  ed.append(h, p);
+
+  if (f.kind !== 'toml' || f.parseError){
+    if (f.parseError){
+      const w = document.createElement('p'); w.className = 'hint';
+      w.style.color = 'var(--warn)';
+      w.textContent = 'TOML parse error — editing raw text: ' + f.parseError;
+      ed.appendChild(w);
+    }
+    const ta = document.createElement('textarea');
+    ta.className = 'big'; ta.value = f.raw;
+    ta.oninput = () => { f.raw = ta.value; f._rawMode = true; markDirty(f.name); };
+    f._rawMode = true;
+    ed.appendChild(ta);
+    const hint = document.createElement('p'); hint.className = 'hint';
+    hint.textContent = f.kind === 'md'
+      ? 'Markdown. Supports **bold**, *italic*, [links](url), lists, and > blockquotes.'
+      : 'Raw file. BibTeX keys: selected={true} pins a paper to the homepage; description={...} adds a summary line.';
+    ed.appendChild(hint);
+    return;
+  }
+
+  f._rawMode = false;
+  buildForm(ed, f.data, f.name);
+
+  const hint = document.createElement('p');
+  hint.className = 'hint';
+  hint.textContent = 'Fields write back to TOML on save. Note: comments in the original file are not preserved when saving a TOML form.';
+  ed.appendChild(hint);
+}
+
+function markDirty(name){
+  dirty.add(name);
+  renderSidebar();
+  $('#status').textContent = 'unsaved changes';
+}
+
+function buildForm(root, obj, fileName){
+  // scalar/array-of-scalar fields first, then nested tables, then arrays of tables
+  const scalars = [], tables = [], tableArrays = [];
+  for (const [k, v] of Object.entries(obj)){
+    if (Array.isArray(v) && v.length && typeof v[0] === 'object') tableArrays.push([k, v]);
+    else if (v && typeof v === 'object' && !Array.isArray(v)) tables.push([k, v]);
+    else scalars.push([k, v]);
+  }
+
+  if (scalars.length){
+    const fs_ = fieldset('General');
+    scalars.forEach(([k, v]) => fs_.appendChild(fieldRow(k, v, obj, fileName)));
+    root.appendChild(fs_);
+  }
+
+  tables.forEach(([k, v]) => {
+    const fs_ = fieldset(titleize(k));
+    buildForm(fs_, v, fileName);
+    root.appendChild(fs_);
+  });
+
+  tableArrays.forEach(([k, arr]) => {
+    const fs_ = fieldset(titleize(k) + ' (' + arr.length + ')');
+    const host = document.createElement('div');
+    const redraw = () => {
+      host.innerHTML = '';
+      arr.forEach((item, i) => {
+        const box = document.createElement('div'); box.className = 'item';
+        const hd = document.createElement('div'); hd.className = 'hd';
+        const b = document.createElement('b'); b.textContent = '#' + (i + 1);
+        const sp = document.createElement('span'); sp.className = 'spacer'; sp.style.flex = '1';
+        const up = mkBtn('↑', () => { if(i>0){ [arr[i-1],arr[i]]=[arr[i],arr[i-1]]; markDirty(fileName); redraw(); } });
+        const dn = mkBtn('↓', () => { if(i<arr.length-1){ [arr[i+1],arr[i]]=[arr[i],arr[i+1]]; markDirty(fileName); redraw(); } });
+        const del = mkBtn('Delete', () => { arr.splice(i,1); markDirty(fileName); redraw(); }, 'danger');
+        hd.append(b, sp, up, dn, del);
+        box.appendChild(hd);
+        Object.entries(item).forEach(([kk, vv]) => box.appendChild(fieldRow(kk, vv, item, fileName)));
+        host.appendChild(box);
+      });
+    };
+    redraw();
+    fs_.appendChild(host);
+    const add = mkBtn('+ Add entry', () => {
+      const tpl = arr.length ? Object.fromEntries(Object.keys(arr[0]).map(k2 => [k2, ''])) : { title: '', content: '' };
+      arr.push(tpl); markDirty(fileName); redraw();
+    });
+    add.style.marginTop = '8px';
+    fs_.appendChild(add);
+    root.appendChild(fs_);
+  });
+}
+
+function mkBtn(label, fn, cls){
+  const b = document.createElement('button');
+  b.className = 'tiny' + (cls ? ' ' + cls : '');
+  b.textContent = label; b.onclick = fn; b.type = 'button';
+  return b;
+}
+
+function fieldset(legend){
+  const f = document.createElement('fieldset');
+  const l = document.createElement('legend'); l.textContent = legend;
+  f.appendChild(l);
+  return f;
+}
+
+function fieldRow(key, val, parent, fileName){
+  const row = document.createElement('div'); row.className = 'row';
+  const lab = document.createElement('label'); lab.textContent = titleize(key);
+  const ctl = document.createElement('div'); ctl.className = 'ctl';
+
+  if (Array.isArray(val)){
+    const host = document.createElement('div');
+    const redraw = () => {
+      host.innerHTML = '';
+      val.forEach((s, i) => {
+        const line = document.createElement('div'); line.className = 'arr';
+        const inp = document.createElement('input'); inp.type = 'text'; inp.value = s ?? '';
+        inp.oninput = () => { val[i] = inp.value; markDirty(fileName); };
+        line.append(inp, mkBtn('×', () => { val.splice(i,1); markDirty(fileName); redraw(); }, 'danger'));
+        host.appendChild(line);
+      });
+      host.appendChild(mkBtn('+ Add', () => { val.push(''); markDirty(fileName); redraw(); }));
+    };
+    redraw();
+    ctl.appendChild(host);
+  } else if (typeof val === 'boolean'){
+    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = val;
+    cb.onchange = () => { parent[key] = cb.checked; markDirty(fileName); };
+    ctl.appendChild(cb);
+  } else if (typeof val === 'number'){
+    const inp = document.createElement('input'); inp.type = 'text'; inp.value = val;
+    inp.oninput = () => {
+      const n = Number(inp.value);
+      parent[key] = Number.isFinite(n) && inp.value.trim() !== '' ? n : inp.value;
+      markDirty(fileName);
+    };
+    ctl.appendChild(inp);
+  } else {
+    const long = String(val ?? '').length > 90 || /content|abstract|description/i.test(key);
+    const inp = document.createElement(long ? 'textarea' : 'input');
+    if (!long) inp.type = 'text';
+    inp.value = val ?? '';
+    inp.oninput = () => { parent[key] = inp.value; markDirty(fileName); };
+    ctl.appendChild(inp);
+  }
+
+  row.append(lab, ctl);
+  return row;
+}
+
+async function save(){
+  const f = FILES.find(x => x.name === current);
+  if (!f) return;
+  const body = f._rawMode ? { name: f.name, raw: f.raw } : { name: f.name, data: f.data };
+  $('#save').disabled = true;
+  try{
+    const r = await fetch('/api/save', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || 'save failed');
+    dirty.delete(f.name);
+    $('#status').textContent = '';
+    renderSidebar();
+    toast('Saved content/' + f.name);
+    setTimeout(refresh, 700);   // let Next.js pick up the file change
+  }catch(e){
+    toast('Save failed: ' + e.message, true);
+  }finally{
+    $('#save').disabled = false;
+  }
+}
+
+function refresh(){
+  const fr = $('#frame');
+  const u = new URL($('#url').value, PREVIEW);
+  u.searchParams.set('_r', Date.now());
+  fr.src = u.toString();
+}
+
+$('#save').onclick = save;
+$('#reload').onclick = refresh;
+$('#open').onclick = () => window.open($('#url').value, '_blank');
+$('#revert').onclick = async () => {
+  if (!confirm('Restore content/' + current + ' from its last backup?')) return;
+  const r = await fetch('/api/revert', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ name: current })
+  });
+  if (r.ok){ dirty.delete(current); await load(current); toast('Reverted'); setTimeout(refresh, 600); }
+  else toast('No backup available', true);
+};
+document.querySelectorAll('[data-nav]').forEach(b => {
+  b.onclick = () => { $('#url').value = PREVIEW + b.dataset.nav; refresh(); };
+});
+$('#url').addEventListener('keydown', e => { if (e.key === 'Enter') refresh(); });
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's'){ e.preventDefault(); save(); }
+});
+window.addEventListener('beforeunload', e => { if (dirty.size){ e.preventDefault(); e.returnValue = ''; } });
+
+load();
+</script>
+</body>
+</html>

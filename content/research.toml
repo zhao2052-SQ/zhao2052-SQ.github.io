@@ -1,0 +1,27 @@
+type = "card"
+title = "Research"
+description = "Current research directions. Each of these is an ongoing thread rather than a finished result."
+
+[[items]]
+title = "Memory Topology"
+subtitle = "Multi-Agent Systems"
+date = "2026 –"
+content = "Treating **who may read and write whose memory** as a first-class learnable variable, separate from the communication graph. Central hypothesis: restricting memory access can *improve* collective intelligence by preserving the independence of agent errors."
+
+[[items]]
+title = "Organizational Learning for Agent Populations"
+subtitle = "Multi-Agent Systems"
+date = "2026 –"
+content = "Systems that **hire, fire, merge, split, specialize, and promote** agents over a long stream of tasks — learning the organization itself rather than a single-task topology."
+
+[[items]]
+title = "Epistemic Orchestration"
+subtitle = "LLM Reasoning"
+date = "2026 –"
+content = "Restructuring an agent organization in a closed loop based on **disagreement, uncertainty, and evidence correlation**, rather than routing statically by task type."
+
+[[items]]
+title = "Quality-Diversity Search"
+subtitle = "Evolutionary Computation"
+date = "2025 –"
+content = "MAP-Elites style archives for high-dimensional discovery problems where **mode collapse** is the dominant failure, with strict out-of-sample validation protocols."

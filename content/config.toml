@@ -1,0 +1,78 @@
+[site]
+title = "Siqi (Stella) Zhao"
+description = "Personal website of Siqi (Stella) Zhao — research on multi-agent organization, orchestration, and learning systems."
+favicon = "/favicon.svg"
+last_updated = "August 11, 2026"
+
+[author]
+name = "Siqi (Stella) Zhao"
+title = "PhD Student"
+institution = "Your University"
+avatar = "/bio.jpg"
+
+[social]
+# Contact info — delete a line to hide that item
+email = "siqi.zhao@example.edu"
+location = "City, Country"
+location_url = "https://maps.google.com"
+location_details = [
+  "Room 000, Research Building,",
+  "University Avenue, City, Country"
+]
+google_scholar = "https://scholar.google.com"
+orcid = "https://orcid.org"
+github = "https://github.com/shatianming5"
+linkedin = "https://linkedin.com"
+
+[features]
+enable_likes = true
+enable_one_page_mode = false
+
+[i18n]
+enabled = true
+locales = ["zh", "en"]
+default_locale = "en"
+mode = "auto"
+fixed_locale = "en"
+persist = true
+switcher = true
+
+[i18n.labels]
+zh = "中文"
+en = "English"
+
+[[navigation]]
+title = "About"
+type = "page"
+target = "about"
+href = "/"
+
+[[navigation]]
+title = "Publications"
+type = "page"
+target = "publications"
+href = "/publications"
+
+[[navigation]]
+title = "Research"
+type = "page"
+target = "research"
+href = "/research"
+
+[[navigation]]
+title = "Awards"
+type = "page"
+target = "awards"
+href = "/awards"
+
+[[navigation]]
+title = "Services"
+type = "page"
+target = "services"
+href = "/services"
+
+[[navigation]]
+title = "CV"
+type = "page"
+target = "cv"
+href = "/cv"
