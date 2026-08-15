@@ -1,4 +1,4 @@
-I am an undergraduate student at the University of Minnesota, Twin Cities, where I am completing a BSc in Statistics and a BA in Economics. I will start my PhD in spring 2028.
+I am an undergraduate student at the University of Minnesota, Twin Cities, where I am completing a BSc in Statistics and a BA in Economics. I plan to start my PhD in spring 2028.
 
 My research focus is on multi-agent orchestration and multi-agent systems.
 
