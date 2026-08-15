@@ -10,7 +10,7 @@ content = "Orchestration for multi-agent systems: how a population of agents sho
 
 [[items]]
 title = "Multi-Agent Systems"
-subtitle = "Multi-Agent Systems"
+subtitle = "Communication, memory, and specialization"
 date = "2026 –"
 content = "How agents communicate, share memory, and specialize — and how those organizational choices affect collective performance."
 

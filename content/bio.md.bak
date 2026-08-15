@@ -1,9 +1,0 @@
-I am an undergraduate student at the **University of Minnesota**.
-
-My research asks a simple question: **how should a population of AI agents organize itself?** Most work on multi-agent LLM systems optimizes *routing* and *topology* — who talks to whom. I am interested in the wider problem of **organizational learning**: who participates, how they connect, when they run, what they transmit, what memory they share, and how the organization restructures itself over its lifetime.
-
-A recurring theme in my work is that **collective intelligence is bounded by effective independence, not by compute**. Sharing everything between agents quietly converts independent errors into correlated ones, which destroys the vabout:I am an undergraduate student at the University of Minnesota, Twin Cities who will finish bachelor degree at the University of Minnesota and start PhD career at spring 2028. My research focus is on multi-agent orchestration and multi-agent systems. I have joined Likelihood lab as a natural language processing engineer and written several papers and posting them on AAAI submission independentlyery verification that multi-agent systems are supposed to provide.
-
-I also work on **quality-diversity optimization** for high-dimensional search problems, where maintaining a diverse population of solutions matters more than converging to a single optimum.
-
-> ✏️ *以上为占位文字 —— 在编辑器里打开 `bio.md` 换成你自己的介绍。*
