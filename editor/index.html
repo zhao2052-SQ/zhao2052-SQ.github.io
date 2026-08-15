@@ -382,27 +382,49 @@ function refresh(){
 $('#save').onclick = () => save(false);
 $('#reload').onclick = refresh;
 
-// If files change on disk (e.g. edited elsewhere) pull them in, unless the
-// user has unsaved work in the current file.
-setInterval(async () => {
-  if (dirty.size || saving) return;
+// Keep the in-memory copy aligned with what is actually on disk. Files the
+// user is editing are left alone; everything else is refreshed, so a tab left
+// open overnight can never write a stale snapshot back over newer content.
+async function syncFromDisk(force){
+  if (saving) return false;
+  let fresh;
   try{
-    const fresh = (await (await fetch('/api/files')).json()).files;
-    const changed = fresh.some(nf => {
-      const old = FILES.find(o => o.name === nf.name);
-      return !old || old.mtime !== nf.mtime;
-    });
-    if (changed){
-      FILES = fresh;
-      renderSidebar();
-      if (current) select(current);
-      $('#status').textContent = '↻ reloaded (changed on disk)';
-      setTimeout(() => {
-        if ($('#status').textContent.startsWith('↻')) $('#status').textContent = '';
-      }, 2500);
-    }
-  }catch{}
-}, 3000);
+    fresh = (await (await fetch('/api/files')).json()).files;
+  }catch{ return false; }
+
+  let changed = false;
+  let currentChanged = false;
+
+  FILES = fresh.map(nf => {
+    const old = FILES.find(o => o.name === nf.name);
+    if (old && dirty.has(nf.name) && !force) return old;
+    if (old && old.mtime === nf.mtime) return old;
+    changed = true;
+    if (nf.name === current) currentChanged = true;
+    if (force) dirty.delete(nf.name);
+    return nf;
+  });
+
+  if (changed){
+    renderSidebar();
+    if (current && !FILES.find(f => f.name === current)) current = FILES[0] && FILES[0].name;
+    if (current && (currentChanged || !FILES.find(f => f.name === current))) select(current);
+    $('#status').textContent = '↻ synced from disk';
+    setTimeout(() => {
+      if ($('#status').textContent.startsWith('↻')) $('#status').textContent = '';
+    }, 2500);
+  }
+  return changed;
+}
+
+setInterval(() => syncFromDisk(false), 3000);
+
+// Coming back to a tab that has been in the background is the exact situation
+// that used to resurrect old template values, so resync before anything else.
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) syncFromDisk(false);
+});
+window.addEventListener('focus', () => syncFromDisk(false));
 $('#open').onclick = () => window.open($('#url').value, '_blank');
 $('#revert').onclick = async () => {
   if (!confirm('Restore content/' + current + ' from its last backup?')) return;

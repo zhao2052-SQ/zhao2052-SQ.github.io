@@ -6,8 +6,8 @@ last_updated = "August 16, 2026"
 
 [author]
 name = "Siqi (Stella) Zhao"
-title = "Junior Student"
-institution = "University of Minnesota"
+title = "Undergraduate Student"
+institution = "University of Minnesota, Twin Cities"
 avatar = "Personal Portrait.jpg"
 
 [social]
@@ -50,18 +50,6 @@ title = "Research"
 type = "page"
 target = "research"
 href = "/research"
-
-[[navigation]]
-title = "Awards"
-type = "page"
-target = "awards"
-href = "/awards"
-
-[[navigation]]
-title = "Services"
-type = "page"
-target = "services"
-href = "/services"
 
 [[navigation]]
 title = "CV"

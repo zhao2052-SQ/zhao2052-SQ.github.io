@@ -1,6 +1,6 @@
 ## Education
 
-**BSc in Statistics and BA in Economics**, University of Minnesota, Twin Cities — *2024 – Present*
+**BSc in Statistics and BA in Economics**, University of Minnesota, Twin Cities — *2024 – 2027 (expected)*
 
 ## Research Experience
 

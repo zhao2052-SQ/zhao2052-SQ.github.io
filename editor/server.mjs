@@ -139,6 +139,12 @@ const server = http.createServer(async (req, res) => {
         });
       }
       const cur = await fs.stat(file).catch(() => null);
+      if (!force && !cur && mtime > 0) {
+        return json(res, 409, {
+          error: 'deleted',
+          message: `content/${name} was deleted on disk. Saving would recreate it from an old copy. Reload to drop it, or press Save again to recreate it.`,
+        });
+      }
       if (!force && cur && cur.mtimeMs - mtime > 1000) {
         return json(res, 409, {
           error: 'stale',
